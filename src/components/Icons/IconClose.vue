@@ -1,6 +1,6 @@
 <template>
-  <svg class="icon" viewBox="0 0 16 16" aria-hidden="true">
-    <path d="M1 1L15 15" stroke="currentColor" stroke-linecap="round"/>
-    <path d="M15 1L1 15" stroke="currentColor" stroke-linecap="round"/>
+  <svg viewBox="0 0 36 36">
+    <path fill-rule="evenodd" clip-rule="evenodd" d="M10.6464 10.6464C10.8417 10.4512 11.1583 10.4512 11.3536 10.6464L25.3536 24.6464C25.5488 24.8417 25.5488 25.1583 25.3536 25.3536C25.1583 25.5488 24.8417 25.5488 24.6464 25.3536L10.6464 11.3536C10.4512 11.1583 10.4512 10.8417 10.6464 10.6464Z" fill="currentColor"/>
+    <path fill-rule="evenodd" clip-rule="evenodd" d="M25.3536 10.6464C25.1583 10.4512 24.8417 10.4512 24.6464 10.6464L10.6464 24.6464C10.4512 24.8417 10.4512 25.1583 10.6464 25.3536C10.8417 25.5488 11.1583 25.5488 11.3536 25.3536L25.3536 11.3536C25.5488 11.1583 25.5488 10.8417 25.3536 10.6464Z" fill="currentColor"/>
   </svg>
 </template>
