@@ -1,9 +1,15 @@
 .button {
   padding: 0;
   border: none;
-  overflow: hidden;
   appearance: none;
-  cursor: pointer;
+  background: transparent;
+
+  &:not(:disabled) {
+    cursor: pointer;
+  }
 }
 
+@import "_accent/button_accent";
+@import "_primary/button_primary";
+@import "_chat/button_chat";
 @import "_icon/button_icon";

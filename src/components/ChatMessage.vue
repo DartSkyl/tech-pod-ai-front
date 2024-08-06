@@ -1,8 +1,15 @@
 <script setup>
 
-const { message } = defineProps({
+import { ref } from 'vue';
+import ChatForm from '@/components/ChatForm.vue';
+
+const { message, time } = defineProps({
   message: {
     type: Object,
+    required: true
+  },
+  time: {
+    type: Boolean,
     required: true
   }
 })
@@ -22,12 +29,30 @@ function formatDate(s) {
   return `${hour}:${minute} ${period}`;
 }
 
+const form = ref()
+
+async function submit() {
+  const result = await form.value.validate()
+  if (!result) return
+
+  console.log('Form submitted, ', result)
+}
+
 </script>
 
 <template>
   <div class="chat-message" :class="`chat-message_${message.type}`">
-    <div class="chat-message__body" v-html="message.text"></div>
-    <div class="chat-message__time">{{ formatDate(message.time) }}</div>
+    <div class="chat-message__body">
+      <div class="chat-message__wrapper" v-html="message.text"></div>
+    </div>
+
+    <ChatForm ref="form" v-if="message.format === 'form'"/>
+
+    <div v-if="time" class="chat-message__time">{{ formatDate(message.time) }}</div>
+
+    <button v-if="message.format === 'form'" @click="submit"
+            class="button button_chat button_accent">Send
+    </button>
   </div>
 </template>
 
@@ -37,7 +62,8 @@ function formatDate(s) {
   margin-bottom: 15px;
   display: flex;
   align-items: flex-end;
-  gap: 12px;
+  flex-wrap: wrap;
+  gap: 10px 12px;
 
   &:first-child {
     margin-top: 20px;
@@ -45,9 +71,8 @@ function formatDate(s) {
 
   &__body {
     padding: 20px 30px 20px 15px;
-    max-width: 304px;
-    font-size: 16px;
-    line-height: 19px;
+    max-width: var(--rc-message-width);
+    min-width: 100px;
     background: var(--color-background-mute);
   }
 
@@ -63,9 +88,14 @@ function formatDate(s) {
     flex-direction: row-reverse;
 
     .chat-message__body {
-      padding-right: 15px;
+      padding: 13px 19px;
       color: var(--color-background);
       background: var(--color-primary);
+    }
+
+    .chat-message__wrapper {
+      margin: 0 auto;
+      width: fit-content;
     }
   }
 }

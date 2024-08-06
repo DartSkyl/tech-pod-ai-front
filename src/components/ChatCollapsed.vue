@@ -11,7 +11,7 @@ const notifications = ref(0)
     <div v-show="notifications > 0" class="chat-notifications">{{ notifications }}</div>
     <div v-show="notifications === 0 && showGreeting" class="chat-greeting">
       <div class="chat-greeting__close">
-        <button class="button button_icon" @click="showGreeting = false" aria-label="Close message">
+        <button class="button button_primary button_icon" @click="showGreeting = false" aria-label="Close message">
           <IconClose/>
         </button>
       </div>
@@ -61,8 +61,6 @@ const notifications = ref(0)
     .button {
       width: 25px;
       height: 25px;
-      color: var(--color-background);
-      background: var(--color-primary);
     }
   }
 

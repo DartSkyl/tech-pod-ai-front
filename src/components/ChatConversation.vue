@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue';
+import { nextTick, ref } from 'vue';
 import IconClose from '@/components/Icons/IconClose.vue';
 import IconArrow from '@/components/Icons/IconArrow.vue';
 import IconMute from '@/components/Icons/IconMute.vue';
@@ -7,33 +7,47 @@ import IconSound from '@/components/Icons/IconSound.vue';
 import ChatMessage from '@/components/ChatMessage.vue';
 
 const sendMessageDisabled = ref(false)
+
 const muted = ref(false)
 
 const input = ref('')
 
+const pending = ref(false)
+
 const messages = ref([
   {
     type: 'incoming',
+    format: 'text',
     time: '2024-08-04 22:25:49',
     text: 'Hello. Welcome to Ricochet Fuel Distributors, Inc.! I am a Live Person here to help.'
   },
   {
     type: 'outgoing',
+    format: 'text',
     time: '2024-08-04 22:28:49',
     text: 'Hello!'
   },
   {
     type: 'incoming',
+    format: 'text',
     time: '2024-08-04 22:29:49',
     text: 'Hello. Which of our services are you interested in?'
   },
   {
     type: 'incoming',
+    format: 'text',
     time: '2024-08-04 22:40:49',
     text: 'Are you there?'
   },
   {
+    type: 'incoming',
+    format: 'form',
+    time: '2024-08-04 22:41:49',
+    text: 'Can I have your name, phone number, and email address so that I can provide you with more specific information about our services?'
+  },
+  {
     type: 'outgoing',
+    format: 'text',
     time: '2024-08-04 23:28:49',
     text: 'End chat'
   }
@@ -57,6 +71,15 @@ const sendMessage = () => {
   })
 
   input.value = ''
+  scrollToBottom()
+}
+
+const dialog = ref()
+
+function scrollToBottom() {
+  nextTick(() => {
+    dialog.value.scrollTop = dialog.value.scrollHeight;
+  });
 }
 
 </script>
@@ -95,8 +118,11 @@ const sendMessage = () => {
       </div>
 
       <div class="chat-main">
-        <div class="chat-container">
-          <ChatMessage v-for="(message, i) in messages" :key="i" :message="message"/>
+        <div class="chat-container" ref="dialog">
+          <ChatMessage v-for="(message, i) in messages" :key="i"
+                       :message="message" :time="messages[i+1]?.type !== message.type"/>
+
+          <div v-show="pending" class="chat-typing"></div>
         </div>
       </div>
 
@@ -112,7 +138,7 @@ const sendMessage = () => {
         <div class="chat-container">
           <input v-model="input" @keydown.enter="sendMessage" placeholder="Type your message...">
           <div class="chat-input__buttons">
-            <button class="button button_icon" aria-label="Send a message"
+            <button class="button button_icon button_primary" aria-label="Send a message"
                     @click="sendMessage" :disabled="sendMessageDisabled">
               <IconArrow/>
             </button>
@@ -193,22 +219,20 @@ const sendMessage = () => {
   }
 }
 
+.chat-hint {
+  margin-top: 20px;
+  text-align: right;
+  font-style: italic;
+  opacity: .5;
+}
+
 .chat-input {
   padding: 12px 0;
   border-top: 1px solid var(--color-border);
 
-  &__buttons {
-
-    .button {
-      width: 40px;
-      height: 40px;
-      color: var(--color-background);
-      background: var(--color-primary);
-
-      &:disabled {
-        cursor: default;
-      }
-    }
+  .button {
+    width: 40px;
+    height: 40px;
   }
 
   .chat-container {
@@ -218,19 +242,13 @@ const sendMessage = () => {
   input {
     padding: 0 20px 0 0;
     flex-grow: 1;
-    font-size: 16px;
-    line-height: 19px;
+    font-size: inherit;
     background: transparent;
     border: 0;
     outline: none;
 
     &::placeholder {
-      color: var(--color-text-muted);
-      opacity: 1;
-    }
-
-    &::-ms-input-placeholder {
-      color: var(--color-text-muted);
+      opacity: .3;
     }
   }
 }
@@ -275,8 +293,6 @@ const sendMessage = () => {
   }
 
   &__status {
-    font-size: 16px;
-    line-height: 19px;
     text-transform: lowercase;
 
     &.status-online {
@@ -285,12 +301,32 @@ const sendMessage = () => {
   }
 }
 
+.chat-typing {
+  width: 57px;
+  height: 21px;
+  background-color: var(--color-primary);
+  background-image: url("data:image/svg+xml,%3Csvg width='23' height='5' viewBox='0 0 23 5' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M5 2.5C5 3.88071 3.88071 5 2.5 5C1.11929 5 0 3.88071 0 2.5C0 1.11929 1.11929 0 2.5 0C3.88071 0 5 1.11929 5 2.5Z' fill='white'/%3E%3Cpath d='M14 2.5C14 3.88071 12.8807 5 11.5 5C10.1193 5 9 3.88071 9 2.5C9 1.11929 10.1193 0 11.5 0C12.8807 0 14 1.11929 14 2.5Z' fill='white'/%3E%3Cpath d='M23 2.5C23 3.88071 21.8807 5 20.5 5C19.1193 5 18 3.88071 18 2.5C18 1.11929 19.1193 0 20.5 0C21.8807 0 23 1.11929 23 2.5Z' fill='white'/%3E%3C/svg%3E%0A");
+  background-repeat: no-repeat;
+  background-position: center center;
+  border-radius: 10px;
+  animation: typing infinite alternate 2s;
+}
+
 .chat-sound {
 
   .button {
     width: 29px;
     height: 29px;
     border-radius: 0;
+  }
+}
+
+@keyframes typing {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: .05;
   }
 }
 
