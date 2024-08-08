@@ -1,5 +1,4 @@
 <script setup>
-
 import { ref } from 'vue';
 import ChatForm from '@/components/ChatForm.vue';
 
@@ -13,6 +12,8 @@ const { message, time } = defineProps({
     required: true
   }
 })
+
+const emit = defineEmits(['submitted'])
 
 function formatDate(s) {
   const [date, time] = s.split(' ');
@@ -30,18 +31,22 @@ function formatDate(s) {
 }
 
 const form = ref()
+const submitDisabled = ref(false)
 
 async function submit() {
+  if (form.value.disabled) return
+
   const result = await form.value.validate()
   if (!result) return
 
-  console.log('Form submitted, ', result)
+  emit('submitted', result)
+  submitDisabled.value = true
 }
 
 </script>
 
 <template>
-  <div class="chat-message" :class="`chat-message_${message.type}`">
+  <div class="chat-message" :class="message.type ? `chat-message_${message.type}` : ''">
     <div class="chat-message__body">
       <div class="chat-message__wrapper" v-html="message.text"></div>
     </div>
@@ -50,7 +55,7 @@ async function submit() {
 
     <div v-if="time" class="chat-message__time">{{ formatDate(message.time) }}</div>
 
-    <button v-if="message.format === 'form'" @click="submit"
+    <button v-if="message.format === 'form'" @click="submit" :disabled="submitDisabled"
             class="button button_chat button_accent">Send
     </button>
   </div>
@@ -82,6 +87,10 @@ async function submit() {
     line-height: 14px;
     white-space: nowrap;
     opacity: .6;
+  }
+
+  &__wrapper {
+    overflow-wrap: break-word;
   }
 
   &_outgoing {

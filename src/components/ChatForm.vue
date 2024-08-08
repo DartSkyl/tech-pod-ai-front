@@ -1,25 +1,20 @@
 <script setup>
-import { ref, reactive, onMounted } from 'vue';
+import { ref, reactive } from 'vue';
 import { useVuelidate } from '@vuelidate/core'
 import { required, email, helpers, maxLength } from '@vuelidate/validators'
 
 const phone = v => {
   if (typeof v === 'undefined' || v.length === 0) return true
 
-  const cleaned = v.replace(/\D/g, '');
-  if (cleaned.length === 10) {
-    return true;
-  } else return cleaned.length === 11 && cleaned[0] === '1';
+  const regex = new RegExp('^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$')
+  return regex.test(v)
 }
 
-const defaultState = {}
 const state = reactive({
   name: '',
   tel: '',
   email: ''
 })
-
-onMounted(() => Object.assign(defaultState, state))
 
 const rules = {
   name: { required, maxLength: maxLength(50) },
@@ -34,17 +29,18 @@ const rules = {
 
 const v$ = useVuelidate(rules, state)
 
-const formDisabled = ref(false)
+const disabled = ref(false)
 
 async function validate() {
   if (await v$.value.$validate() === false) return false
 
   v$.value.$reset()
-  Object.assign(state, defaultState)
+  disabled.value = true
   return state
 }
 
 defineExpose({
+  disabled,
   validate
 });
 
@@ -53,26 +49,32 @@ defineExpose({
 <template>
   <form class="chat-form">
     <div class="chat-form__row">
-      <input v-model.trim="state.name" :class="{ invalid: v$.name.$error }" :disabled="formDisabled"
-             class="chat-form__field" type="text" name="chat-form-name" placeholder="Your Name"
-             autocomplete="given-name">
-      <template v-if="v$.name.$errors.length">
-        <div v-for="error in v$.name.$errors" :key="error.$uid" class="chat-form__error">{{ error.$message }}</div>
-      </template>
+      <div class="chat-form__wrapper">
+        <input v-model.trim="state.name" :class="{ invalid: v$.name.$error }" :disabled="disabled"
+               class="chat-form__field" type="text" name="chat-form-name" placeholder="Your Name"
+               autocomplete="given-name">
+        <div v-if="v$.name.$errors.length" :key="v$.name.$errors[0].$uid"
+             class="chat-form__error">{{ v$.name.$errors[0].$message }}
+        </div>
+      </div>
     </div>
     <div class="chat-form__row">
-      <input v-model.trim="state.tel" :class="{ invalid: v$.tel.$error }" :disabled="formDisabled"
-             class="chat-form__field" type="text" name="chat-form-tel" placeholder="Phone Number" autocomplete="tel">
-      <template v-if="v$.tel.$errors.length">
-        <div v-for="error in v$.tel.$errors" :key="error.$uid" class="chat-form__error">{{ error.$message }}</div>
-      </template>
+      <div class="chat-form__wrapper">
+        <input v-model.trim="state.tel" :class="{ invalid: v$.tel.$error }" :disabled="disabled"
+               class="chat-form__field" type="text" name="chat-form-tel" placeholder="Phone Number" autocomplete="tel">
+        <div v-if="v$.tel.$errors.length" :key="v$.tel.$errors[0].$uid"
+             class="chat-form__error">{{ v$.tel.$errors[0].$message }}
+        </div>
+      </div>
     </div>
     <div class="chat-form__row">
-      <input v-model.trim="state.email" :class="{ invalid: v$.email.$error }" :disabled="formDisabled"
-             class="chat-form__field" type="email" name="chat-form-email" placeholder="Email" autocomplete="email">
-      <template v-if="v$.email.$errors.length">
-        <div v-for="error in v$.email.$errors" :key="error.$uid" class="chat-form__error">{{ error.$message }}</div>
-      </template>
+      <div class="chat-form__wrapper">
+        <input v-model.trim="state.email" :class="{ invalid: v$.email.$error }" :disabled="disabled"
+               class="chat-form__field" type="email" name="chat-form-email" placeholder="Email" autocomplete="email">
+        <div v-if="v$.email.$errors.length" :key="v$.email.$errors[0].$uid"
+             class="chat-form__error">{{ v$.email.$errors[0].$message }}
+        </div>
+      </div>
     </div>
   </form>
 </template>
@@ -86,10 +88,12 @@ defineExpose({
   width: var(--rc-message-width);
 
   &__error {
-    margin-top: 5px;
-    margin-left: auto;
-    width: fit-content;
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    left: 5px;
     color: var(--rc-color-red);
+    text-align: right;
     font-size: 10px;
     line-height: 12px;
   }
@@ -110,6 +114,10 @@ defineExpose({
     &::placeholder {
       opacity: .4;
     }
+  }
+
+  &__wrapper {
+    position: relative;
   }
 }
 

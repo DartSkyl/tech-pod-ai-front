@@ -1,9 +1,17 @@
 <script setup>
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import ChatCollapsed from '@/components/ChatCollapsed.vue';
 import ChatConversation from '@/components/ChatConversation.vue';
+import { useChatStore } from '../stores/chat.js';
 
 const collapsed = ref(true)
+
+const chat = useChatStore()
+
+onMounted(() => {
+  chat.init()
+  chat.showGreeting()
+})
 
 </script>
 

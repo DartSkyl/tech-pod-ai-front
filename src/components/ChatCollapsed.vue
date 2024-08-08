@@ -1,17 +1,20 @@
 <script setup>
 import { ref } from 'vue';
 import IconClose from '@/components/Icons/IconClose.vue';
+import { useChatStore } from '../../stores/chat.js';
 
-const showGreeting = ref(true)
+const store = useChatStore()
+
 const notifications = ref(0)
+
 </script>
 
 <template>
   <div class="chat-collapsed">
     <div v-show="notifications > 0" class="chat-notifications">{{ notifications }}</div>
-    <div v-show="notifications === 0 && showGreeting" class="chat-greeting">
+    <div v-show="notifications === 0 && store.greeting" class="chat-greeting">
       <div class="chat-greeting__close">
-        <button class="button button_primary button_icon" @click="showGreeting = false" aria-label="Close message">
+        <button class="button button_primary button_icon" @click="store.dismissGreeting()" aria-label="Close message">
           <IconClose/>
         </button>
       </div>

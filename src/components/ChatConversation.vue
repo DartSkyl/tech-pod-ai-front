@@ -1,59 +1,71 @@
 <script setup>
-import { nextTick, ref } from 'vue';
+import { nextTick, onMounted, onUnmounted, ref, watch } from 'vue';
 import IconClose from '@/components/Icons/IconClose.vue';
 import IconArrow from '@/components/Icons/IconArrow.vue';
 import IconMute from '@/components/Icons/IconMute.vue';
 import IconSound from '@/components/Icons/IconSound.vue';
 import ChatMessage from '@/components/ChatMessage.vue';
+import { useChatStore } from '../../stores/chat.js';
+import { useMessagesStore } from '../../stores/messages.js';
+import { storeToRefs } from 'pinia';
 
-const sendMessageDisabled = ref(false)
+const chat = useChatStore()
+const { messages } = storeToRefs(useMessagesStore())
 
-const muted = ref(false)
+let socket;
+
+const connected = ref(false);
+
+const url = `ws://localhost:8000/ws/${chat.id}`
+// const clientID = Date.now()
+// const url = `ws://localhost:8000/ws/${clientID}`
+
+const connect = () => {
+  socket = new WebSocket(url);
+
+  socket.onopen = () => {
+    connected.value = true
+    console.log('WebSocket connected');
+  };
+
+  socket.onmessage = (event) => {
+    const message = JSON.parse(event.data);
+    setTimeout(() => {
+      pending.value = false
+      messages.value.push(message);
+    }, 1000)
+  };
+
+  socket.onclose = () => {
+    connected.value = false
+    pending.value = false
+    console.log('WebSocket disconnected');
+  };
+
+  socket.onerror = (error) => {
+    pending.value = false
+    console.error('WebSocket error', error);
+  };
+};
+
+onMounted(() => {
+  console.log('conversation mounted')
+  connect();
+  chat.dismissGreeting()
+});
+
+onUnmounted(() => {
+  if (socket) {
+    socket.close();
+  }
+});
 
 const input = ref('')
 
+const muted = ref(false)
 const pending = ref(false)
 
-const messages = ref([
-  {
-    type: 'incoming',
-    format: 'text',
-    time: '2024-08-04 22:25:49',
-    text: 'Hello. Welcome to Ricochet Fuel Distributors, Inc.! I am a Live Person here to help.'
-  },
-  {
-    type: 'outgoing',
-    format: 'text',
-    time: '2024-08-04 22:28:49',
-    text: 'Hello!'
-  },
-  {
-    type: 'incoming',
-    format: 'text',
-    time: '2024-08-04 22:29:49',
-    text: 'Hello. Which of our services are you interested in?'
-  },
-  {
-    type: 'incoming',
-    format: 'text',
-    time: '2024-08-04 22:40:49',
-    text: 'Are you there?'
-  },
-  {
-    type: 'incoming',
-    format: 'form',
-    time: '2024-08-04 22:41:49',
-    text: 'Can I have your name, phone number, and email address so that I can provide you with more specific information about our services?'
-  },
-  {
-    type: 'outgoing',
-    format: 'text',
-    time: '2024-08-04 23:28:49',
-    text: 'End chat'
-  }
-])
-
-const sendMessage = () => {
+const send = () => {
   if (input.value.length < 1) return
 
   const now = new Date();
@@ -65,14 +77,29 @@ const sendMessage = () => {
   const seconds = String(now.getSeconds()).padStart(2, '0');
 
   messages.value.push({
-    type: 'outgoing',
+    text: input.value,
     time: `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`,
-    text: input.value
-  })
+    type: 'outgoing'
+  });
 
+  const message = input.value
   input.value = ''
-  scrollToBottom()
+
+  setTimeout(() => {
+    pending.value = true
+    scrollToBottom()
+
+    if (socket && connected.value) {
+      socket.send(message);
+    }
+  }, 1000)
 }
+
+watch(messages, () => {
+  scrollToBottom()
+}, {
+  deep: true
+})
 
 const dialog = ref()
 
@@ -120,7 +147,8 @@ function scrollToBottom() {
       <div class="chat-main">
         <div class="chat-container" ref="dialog">
           <ChatMessage v-for="(message, i) in messages" :key="i"
-                       :message="message" :time="messages[i+1]?.type !== message.type"/>
+                       :time="!messages[i+1] || messages[i+1].type !== message.type"
+                       :message="message" @submitted="socket.send(JSON.stringify($event))"/>
 
           <div v-show="pending" class="chat-typing"></div>
         </div>
@@ -136,10 +164,10 @@ function scrollToBottom() {
 
       <div class="chat-input">
         <div class="chat-container">
-          <input v-model="input" @keydown.enter="sendMessage" placeholder="Type your message...">
+          <input v-model="input" @keydown.enter="send" placeholder="Type your message...">
           <div class="chat-input__buttons">
             <button class="button button_icon button_primary" aria-label="Send a message"
-                    @click="sendMessage" :disabled="sendMessageDisabled">
+                    @click="send">
               <IconArrow/>
             </button>
           </div>
@@ -261,6 +289,7 @@ function scrollToBottom() {
 
   .chat-container {
     height: 100%;
+    overflow-x: hidden;
     overflow-y: auto;
     overscroll-behavior-y: contain;
 

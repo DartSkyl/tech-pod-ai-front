@@ -7,6 +7,10 @@
   &:not(:disabled) {
     cursor: pointer;
   }
+
+  &:disabled {
+    opacity: .7;
+  }
 }
 
 @import "_accent/button_accent";
