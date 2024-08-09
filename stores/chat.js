@@ -1,20 +1,30 @@
 import { defineStore } from 'pinia'
-import { onMounted, ref } from 'vue';
+import { ref } from 'vue';
+import { useLocalStorage } from '@/composables/useLocalStorage.js';
+import { useWebSocket } from '@/composables/useWebSocket.js';
 
 export const useChatStore = defineStore('chat', () => {
   const id = ref('')
   const greeting = ref(false)
+  const connected = ref(false)
+  const opened = ref(false)
+  const typing = ref(false)
+  const socket = useWebSocket()
+
+  const { getValue, setValue } = useLocalStorage()
 
   function init() {
-    const existingUserID = localStorage.getItem('rc_chat_id')
+    const existingUserID = getValue('chat_id')
 
     if (existingUserID) {
       id.value = existingUserID
 
     } else {
       id.value = generateID()
-      localStorage.setItem('rc_chat_id', id.value)
+      setValue('chat_id', id.value)
     }
+
+    socket.connect(id.value)
   }
 
   function generateID() {
@@ -27,24 +37,24 @@ export const useChatStore = defineStore('chat', () => {
   function showGreeting() {
     const show = document.cookie
       .split('; ')
-      .find(cookie => cookie.startsWith('rc_greeting='));
-
-    console.log(show)
+      .find(row => row.startsWith('rc_greeting='))
+      ?.split('=')[1];
 
     // 1. First visit, chat hasn't been opened: show greeting after delay
     // 2. Not first visit: show greeting without delay if it hasn't been dismissed
     if (typeof show === 'undefined') {
       setTimeout(() => {
-        greeting.value = true
-        document.cookie = 'rc_greeting=true path=/';
+        greeting.value = !opened.value
+        const cookieValue = opened.value ? 0 : 1
+        document.cookie = `rc_greeting=${cookieValue}; path=/`;
       }, 5000)
-    } else greeting.value = show;
+    } else greeting.value = show === '1';
   }
 
   function dismissGreeting() {
     greeting.value = false;
-    document.cookie = 'rc_greeting=false; path=/';
+    document.cookie = 'rc_greeting=0; path=/';
   }
 
-  return { id, greeting, init, dismissGreeting, showGreeting }
+  return { id, socket, greeting, connected, opened, typing, init, dismissGreeting, showGreeting }
 })

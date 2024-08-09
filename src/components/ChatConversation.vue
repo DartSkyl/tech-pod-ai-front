@@ -1,69 +1,20 @@
 <script setup>
-import { nextTick, onMounted, onUnmounted, ref, watch } from 'vue';
+import { nextTick, ref, toRef, watch } from 'vue';
+import { storeToRefs } from 'pinia';
 import IconClose from '@/components/Icons/IconClose.vue';
 import IconArrow from '@/components/Icons/IconArrow.vue';
 import IconMute from '@/components/Icons/IconMute.vue';
 import IconSound from '@/components/Icons/IconSound.vue';
 import ChatMessage from '@/components/ChatMessage.vue';
-import { useChatStore } from '../../stores/chat.js';
 import { useMessagesStore } from '../../stores/messages.js';
-import { storeToRefs } from 'pinia';
+import { useNotificationsStore } from '../../stores/notifications.js';
+import { useChatStore } from '../../stores/chat.js';
 
 const chat = useChatStore()
+const notifications = useNotificationsStore()
 const { messages } = storeToRefs(useMessagesStore())
 
-let socket;
-
-const connected = ref(false);
-
-const url = `ws://localhost:8000/ws/${chat.id}`
-// const clientID = Date.now()
-// const url = `ws://localhost:8000/ws/${clientID}`
-
-const connect = () => {
-  socket = new WebSocket(url);
-
-  socket.onopen = () => {
-    connected.value = true
-    console.log('WebSocket connected');
-  };
-
-  socket.onmessage = (event) => {
-    const message = JSON.parse(event.data);
-    setTimeout(() => {
-      pending.value = false
-      messages.value.push(message);
-    }, 1000)
-  };
-
-  socket.onclose = () => {
-    connected.value = false
-    pending.value = false
-    console.log('WebSocket disconnected');
-  };
-
-  socket.onerror = (error) => {
-    pending.value = false
-    console.error('WebSocket error', error);
-  };
-};
-
-onMounted(() => {
-  console.log('conversation mounted')
-  connect();
-  chat.dismissGreeting()
-});
-
-onUnmounted(() => {
-  if (socket) {
-    socket.close();
-  }
-});
-
 const input = ref('')
-
-const muted = ref(false)
-const pending = ref(false)
 
 const send = () => {
   if (input.value.length < 1) return
@@ -86,12 +37,8 @@ const send = () => {
   input.value = ''
 
   setTimeout(() => {
-    pending.value = true
+    chat.socket.send(message)
     scrollToBottom()
-
-    if (socket && connected.value) {
-      socket.send(message);
-    }
   }, 1000)
 }
 
@@ -101,6 +48,11 @@ watch(messages, () => {
   deep: true
 })
 
+// todo do another way
+watch(chat, ({ typing }) => {
+  if (typing) scrollToBottom()
+}, { deep: true })
+
 const dialog = ref()
 
 function scrollToBottom() {
@@ -108,6 +60,10 @@ function scrollToBottom() {
     dialog.value.scrollTop = dialog.value.scrollHeight;
   });
 }
+
+defineExpose({
+  scrollToBottom
+})
 
 </script>
 
@@ -128,9 +84,9 @@ function scrollToBottom() {
           </div>
 
           <div class="chat-sound">
-            <button class="button button_icon" @click="muted = !muted"
-                    :aria-label="muted ? 'Enable sounds' : 'Mute sounds'">
-              <IconMute v-if="muted"/>
+            <button class="button button_icon" @click="notifications.toggle()"
+                    :aria-label="notifications.muted ? 'Enable sounds' : 'Mute sounds'">
+              <IconMute v-if="notifications.muted"/>
               <IconSound v-else/>
             </button>
           </div>
@@ -150,7 +106,7 @@ function scrollToBottom() {
                        :time="!messages[i+1] || messages[i+1].type !== message.type"
                        :message="message" @submitted="socket.send(JSON.stringify($event))"/>
 
-          <div v-show="pending" class="chat-typing"></div>
+          <div v-show="chat.typing" class="chat-typing"></div>
         </div>
       </div>
 
