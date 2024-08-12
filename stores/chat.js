@@ -11,15 +11,12 @@ export const useChatStore = defineStore('chat', () => {
   const connected = ref(false)
   const opened = ref(false)
   const typing = ref(false)
-
-  const { notify } = useNotificationsStore()
-
   const greeting = reactive({
     show: 0,
     timeout: 0
   })
 
-  // todo store form submission
+  const { notify } = useNotificationsStore()
 
   const api = useApi()
   const { getStoredValue, setStoredValue } = useLocalStorage()

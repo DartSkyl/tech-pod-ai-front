@@ -1,5 +1,5 @@
 <script setup>
-import { nextTick, ref, watch } from 'vue'
+import { nextTick, ref, toRef, watch } from 'vue'
 import { storeToRefs } from 'pinia'
 import IconClose from '@/components/Icons/IconClose.vue'
 import IconArrow from '@/components/Icons/IconArrow.vue'
@@ -48,10 +48,9 @@ watch(messages, () => {
   deep: true
 })
 
-// todo do another way
 watch(chat, ({ typing }) => {
   if (typing) scrollToBottom()
-}, { deep: true })
+})
 
 const dialog = ref()
 
@@ -64,6 +63,8 @@ function scrollToBottom() {
 defineExpose({
   scrollToBottom
 })
+
+const privacyPolicyUrl = import.meta.env.VITE_PRIVACY_POLICY_URL ?? false
 
 </script>
 
@@ -115,9 +116,9 @@ defineExpose({
 
       <div class="chat-footer">
         <div class="chat-container">
-          <span>Created by <a target="_blank" href="https://itinkers.pro"><img src="/itinkers.svg"
-                                                                               alt="iTinkers"></a></span>
-          <span><a target="_blank" href="#">Privacy Policy</a></span>
+          <span>Created by <a target="_blank" href="https://itinkers.pro">
+            <img src="/itinkers.svg" alt="iTinkers"></a></span>
+          <span v-if="privacyPolicyUrl"><a target="_blank" :href="privacyPolicyUrl">Privacy Policy</a></span>
         </div>
       </div>
 
