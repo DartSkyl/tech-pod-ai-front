@@ -1,8 +1,9 @@
 .button {
   padding: 0;
+  color: inherit;
+  background: transparent;
   border: none;
   appearance: none;
-  background: transparent;
 
   &:not(:disabled) {
     cursor: pointer;
