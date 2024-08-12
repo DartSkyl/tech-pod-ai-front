@@ -6,6 +6,14 @@ See [Vite Configuration Reference](https://vitejs.dev/config/).
 
 ## Project Setup
 
+### Create .env file and setup environment variables
+
+```sh
+cp .env.example .env
+```
+
+### Install dependencies
+
 ```sh
 npm install
 ```
