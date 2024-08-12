@@ -1,32 +1,32 @@
-import { ref } from 'vue';
+import { ref } from 'vue'
 
 export function useLocalStorage() {
-  const storageKey = 'rc_chat';
-  const storageRef = ref(getStorageObject());
+  const storageKey = 'rc_chat'
+  const storageRef = ref(getStorageObject())
 
   function getStorageObject() {
-    const storedValue = localStorage.getItem(storageKey);
-    return storedValue ? JSON.parse(storedValue) : {};
+    const storedValue = localStorage.getItem(storageKey)
+    return storedValue ? JSON.parse(storedValue) : {}
   }
 
   function saveStorageObject(newObject) {
-    localStorage.setItem(storageKey, JSON.stringify(newObject));
-    storageRef.value = newObject;
+    localStorage.setItem(storageKey, JSON.stringify(newObject))
+    storageRef.value = newObject
   }
 
-  function getValue(key) {
-    const storageObject = getStorageObject();
-    return storageObject[key];
+  function getStoredValue(key) {
+    const storageObject = getStorageObject()
+    return storageObject[key]
   }
 
-  function setValue(key, value) {
-    const storageObject = getStorageObject();
-    storageObject[key] = value;
-    saveStorageObject(storageObject);
+  function setStoredValue(key, value) {
+    const storageObject = getStorageObject()
+    storageObject[key] = value
+    saveStorageObject(storageObject)
   }
 
   return {
-    getValue,
-    setValue
-  };
+    getStoredValue,
+    setStoredValue
+  }
 }

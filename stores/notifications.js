@@ -1,24 +1,18 @@
-import { defineStore, storeToRefs } from 'pinia'
-import { computed, ref } from 'vue';
-import { useLocalStorage } from '@/composables/useLocalStorage';
-import { useMessagesStore } from './messages.js';
+import { defineStore } from 'pinia'
+import { ref } from 'vue'
+import { useLocalStorage } from '@/composables/useLocalStorage'
 
 export const useNotificationsStore = defineStore('notifications', () => {
-  const muted = ref(false);
+  const muted = ref(false)
 
-  const { getValue, setValue } = useLocalStorage()
-  const { messages } = storeToRefs(useMessagesStore())
-
-  const notifications = computed(() => {
-    return messages.value.filter(message => message.read === false).length;
-  })
+  const { getStoredValue, setStoredValue } = useLocalStorage()
 
   function init() {
-    const stored = getValue('muted')
-    if (typeof stored === 'undefined') {
-      setValue('muted', false)
+    const storedMuted = getStoredValue('muted')
+    if (typeof storedMuted === 'undefined') {
+      setStoredValue('muted', false)
     } else {
-      muted.value = stored
+      muted.value = storedMuted
     }
   }
 
@@ -26,23 +20,14 @@ export const useNotificationsStore = defineStore('notifications', () => {
     if (muted.value) return
     const audio = new Audio('/notification.mp3')
     audio.play().catch(e => {
-      console.error('Error playing sound:', e);
-    });
+      console.error('Error playing notifications sound:', e)
+    })
   }
 
   function toggle() {
     muted.value = !muted.value
-    setValue('muted', muted.value)
+    setStoredValue('muted', muted.value)
   }
 
-  function clear() {
-    messages.value = messages.value.map(message => {
-      if ('read' in message) {
-        return { ...message, read: true };
-      }
-      return message
-    });
-  }
-
-  return { notifications, muted, init, notify, toggle, clear }
+  return { muted, init, notify, toggle }
 })

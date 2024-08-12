@@ -11,4 +11,8 @@
   &.status-online {
     background: var(--rc-color-green);
   }
+
+  &.status-offline {
+    background: var(--rc-color-red);
+  }
 }

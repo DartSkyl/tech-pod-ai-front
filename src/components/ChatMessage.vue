@@ -1,6 +1,6 @@
 <script setup>
-import { ref } from 'vue';
-import ChatForm from '@/components/ChatForm.vue';
+import { ref } from 'vue'
+import ChatForm from '@/components/ChatForm.vue'
 
 const { message, time } = defineProps({
   message: {
@@ -16,18 +16,18 @@ const { message, time } = defineProps({
 const emit = defineEmits(['submitted'])
 
 function formatDate(s) {
-  const [date, time] = s.split(' ');
+  const [date, time] = s.split(' ')
 
-  let [hour, minute] = time.split(':');
+  let [hour, minute] = time.split(':')
 
-  hour = parseInt(hour, 10);
+  hour = parseInt(hour, 10)
 
-  const period = hour >= 12 ? 'pm' : 'am';
+  const period = hour >= 12 ? 'pm' : 'am'
 
-  hour = hour % 12;
-  hour = hour ? hour : 12;
+  hour = hour % 12
+  hour = hour ? hour : 12
 
-  return `${hour}:${minute} ${period}`;
+  return `${hour}:${minute} ${period}`
 }
 
 const form = ref()
@@ -69,6 +69,9 @@ async function submit() {
   align-items: flex-end;
   flex-wrap: wrap;
   gap: 10px 12px;
+  @include for-mobile-down {
+    margin-bottom: 20px;
+  }
 
   &:first-child {
     margin-top: 20px;
@@ -79,6 +82,9 @@ async function submit() {
     max-width: var(--rc-message-width);
     min-width: 100px;
     background: var(--color-background-mute);
+    @include for-mobile-down {
+      padding: 15px 30px 15px 15px;
+    }
   }
 
   &__time {
@@ -87,6 +93,9 @@ async function submit() {
     line-height: 14px;
     white-space: nowrap;
     opacity: .6;
+    @include for-mobile-down {
+      font-size: 10px;
+    }
   }
 
   &__wrapper {
@@ -100,6 +109,9 @@ async function submit() {
       padding: 13px 19px;
       color: var(--color-background);
       background: var(--color-primary);
+      @include for-mobile-down {
+        padding: 15px 20px;
+      }
     }
 
     .chat-message__wrapper {

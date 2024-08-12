@@ -1,5 +1,5 @@
 <script setup>
-import { ref, reactive } from 'vue';
+import { ref, reactive } from 'vue'
 import { useVuelidate } from '@vuelidate/core'
 import { required, email, helpers, maxLength } from '@vuelidate/validators'
 
@@ -42,7 +42,7 @@ async function validate() {
 defineExpose({
   disabled,
   validate
-});
+})
 
 </script>
 

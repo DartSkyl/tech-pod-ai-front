@@ -1,5 +1,5 @@
 @import "modern-css-reset";
-@import "fonts";
+@import "mixins";
 
 :root {
   /* Color palette */
@@ -33,6 +33,9 @@
 
   /* Other */
   --rc-message-width: 305px;
+  @include for-mobile-down {
+    --rc-message-width: 272px;
+  }
 }
 
 *,
@@ -67,11 +70,22 @@ body {
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  @include for-mobile-down {
+    font-size: 14px;
+  }
 }
 
 a {
   color: inherit;
   text-decoration-skip-ink: none;
+}
+
+a, button, [tabindex] {
+  &:focus-visible {
+    outline-offset: 3px;
+    outline-style: solid;
+    outline-color: var(--color-primary);
+  }
 }
 
 @import "blocks";
