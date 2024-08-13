@@ -39,7 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
 </script>
 
 <template>
-  <div class="ricochat" :class="chat.opened ? 'expanded' : 'collapsed'">
+  <div class="ricochet-chat" :class="chat.opened ? 'expanded' : 'collapsed'">
     <ChatConversation ref="dialog" v-show="chat.opened" @collapse="chat.opened = false"/>
     <ChatCollapsed v-show="!chat.opened" @expand="chat.opened = true"/>
   </div>
@@ -47,7 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 <style scoped lang="scss">
 
-.ricochat {
+.ricochet-chat {
   position: fixed;
   right: 0;
   bottom: 0;

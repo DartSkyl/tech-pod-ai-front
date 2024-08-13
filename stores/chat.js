@@ -3,7 +3,7 @@ import { reactive, ref } from 'vue'
 import { useLocalStorage } from '@/composables/useLocalStorage.js'
 import { useWebSocket } from '@/composables/useWebSocket.js'
 import { useApi } from '@/composables/useApi.js'
-import { useNotificationsStore } from './notifications.js';
+import { useNotificationsStore } from './notifications.js'
 
 export const useChatStore = defineStore('chat', () => {
   const id = ref('')

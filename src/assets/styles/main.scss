@@ -1,6 +1,7 @@
 @import "modern-css-reset";
 @import "mixins";
 
+:host,
 :root {
   /* Color palette */
   --rc-color-yellow: #EEAC00;
