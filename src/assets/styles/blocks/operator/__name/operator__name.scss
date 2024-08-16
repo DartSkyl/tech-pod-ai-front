@@ -1,0 +1,12 @@
+.chat--operator__status {
+  line-height: 1.2;
+  text-transform: lowercase;
+
+  &.chat--status-online {
+    color: var(--rc-color-green);
+  }
+
+  &.chat--status-offline {
+    color: var(--rc-color-red);
+  }
+}

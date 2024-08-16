@@ -1,0 +1,10 @@
+.chat--message__time {
+  font-weight: 300;
+  font-size: 12px;
+  line-height: 14px;
+  white-space: nowrap;
+  opacity: .6;
+  @include for-mobile-down {
+    font-size: 10px;
+  }
+}

@@ -1,0 +1,13 @@
+.chat--greeting__close {
+  margin-left: auto;
+  z-index: 1;
+
+  .button {
+    width: 25px;
+    height: 25px;
+    @include for-mobile-down {
+      width: 20px;
+      height: 20px;
+    }
+  }
+}

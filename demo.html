@@ -3,15 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RicoChat</title>
+    <title>Ricochet Chat Demo</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Coda&family=Roboto:ital,wght@0,300;0,400;1,400&display=swap"
           rel="stylesheet">
     <script src="dist/ricochet-chat.umd.js"></script>
 </head>
-<body>
-<h1>Demo</h1>
+<body style="margin: 0;">
+<picture style="display: block; width: 100%;">
+    <source media="(max-width: 820px)" srcset="demo-pic-360.jpg"/>
+    <source media="(max-width: 1365px)" srcset="demo-pic-991.jpg"/>
+    <img style="display: block; width: 100%;" src="demo-pic-1440.jpg" alt="Screenshot"/>
+</picture>
+
 <ricochet-chat></ricochet-chat>
 </body>
 </html>

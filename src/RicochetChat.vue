@@ -44,39 +44,3 @@ document.addEventListener('DOMContentLoaded', () => {
     <ChatCollapsed v-show="!chat.opened" @expand="chat.opened = true"/>
   </div>
 </template>
-
-<style scoped lang="scss">
-
-.ricochet-chat {
-  position: fixed;
-  right: 0;
-  bottom: 0;
-  width: 100%;
-  height: 100%;
-  min-height: 0;
-  min-width: 0;
-  z-index: 2147483647;
-  @include for-mobile-up {
-    margin: 40px;
-  }
-
-  &.expanded {
-    max-width: 478px;
-    max-height: 738px;
-    @include for-mobile-down {
-      max-height: var(--rc-app-height, 100vh);
-      max-width: 100%;
-    }
-  }
-
-  &.collapsed {
-    max-width: 306px;
-    max-height: 111px;
-    @include for-mobile-down {
-      margin: 15px;
-      max-height: 88px;
-    }
-  }
-}
-
-</style>

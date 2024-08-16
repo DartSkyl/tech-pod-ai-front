@@ -1,0 +1,16 @@
+.chat--conversation__footer {
+  padding: 20px 0 12px;
+  font-size: 12px;
+  font-weight: 300;
+
+  .chat--container {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start
+  }
+
+  img {
+    display: inline-block;
+    height: 1em;
+  }
+}

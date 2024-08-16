@@ -1,0 +1,20 @@
+.chat--message {
+  margin-bottom: 15px;
+  display: flex;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  gap: 10px 12px;
+  @include for-mobile-down {
+    margin-bottom: 20px;
+  }
+
+  &:first-child {
+    margin-top: 20px;
+  }
+}
+
+@import "__body/message__body";
+@import "__time/message__time";
+@import "__wrapper/message__wrapper";
+@import "__wrapper/message__wrapper";
+@import "_outgoing/message_outgoing";

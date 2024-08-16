@@ -1,0 +1,17 @@
+.chat--message_outgoing {
+  flex-direction: row-reverse;
+
+  .chat--message__body {
+    padding: 13px 19px;
+    color: var(--color-background);
+    background: var(--color-primary);
+    @include for-mobile-down {
+      padding: 15px 20px;
+    }
+  }
+
+  .chat--message__wrapper {
+    margin: 0 auto;
+    width: fit-content;
+  }
+}
