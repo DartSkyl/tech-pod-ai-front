@@ -1,10 +1,9 @@
-import './assets/styles/main.scss'
-
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 
-import App from './App.vue'
+import App from './RicochetChat.vue'
+import './assets/styles/main.scss'
 
 createApp(App)
   .use(createPinia())
-  .mount('#ricochat')
+  .mount('#ricochet-chat')

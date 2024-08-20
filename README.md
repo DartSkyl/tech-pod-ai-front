@@ -18,13 +18,19 @@ cp .env.example .env
 npm install
 ```
 
-### Compile and Hot-Reload for Development
+### Compile and hot-reload for development
 
 ```sh
 npm run dev
 ```
 
-### Compile and Minify for Production
+### Compile and minify for production in application mode
+
+```sh
+npm run build
+```
+
+### Compile and minify for production in web component mode
 
 ```sh
 npm run build

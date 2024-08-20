@@ -1,0 +1,16 @@
+.chat--collapsed__entry {
+  margin-top: 18px;
+  padding: 0;
+  display: block;
+  flex-shrink: 0;
+  width: 93px;
+  height: 93px;
+  background: none;
+  border: none;
+  appearance: none;
+  cursor: pointer;
+  @include for-mobile-down {
+    width: 70px;
+    height: 70px;
+  }
+}

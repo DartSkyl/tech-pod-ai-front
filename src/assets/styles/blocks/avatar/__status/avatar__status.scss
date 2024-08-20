@@ -1,4 +1,4 @@
-.chat-avatar__status {
+.chat--avatar__status {
   position: absolute;
   display: block;
   width: 12px;
@@ -8,11 +8,11 @@
   transform: translate(3px, calc(-100% - 2px));
   z-index: 1;
 
-  &.status-online {
+  &.chat--status-online {
     background: var(--rc-color-green);
   }
 
-  &.status-offline {
+  &.chat--status-offline {
     background: var(--rc-color-red);
   }
 }

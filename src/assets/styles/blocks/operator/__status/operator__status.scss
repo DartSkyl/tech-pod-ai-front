@@ -1,0 +1,14 @@
+.chat--operator__name {
+  font-family: Coda, Roboto, -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 24px;
+  line-height: 1.4;
+  @include for-mobile-down {
+    font-size: 22px;
+  }
+
+  .chat--button {
+    margin-left: 12px;
+    display: inline-block;
+    vertical-align: sub;
+  }
+}

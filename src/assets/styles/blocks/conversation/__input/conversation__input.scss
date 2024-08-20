@@ -1,0 +1,30 @@
+.chat--conversation__input {
+  padding: 12px 0;
+  border-top: 1px solid var(--color-border);
+
+  .chat--button {
+    width: 40px;
+    height: 40px;
+    @include for-mobile-down {
+      width: 30px;
+      height: 30px;
+    }
+  }
+
+  .chat--container {
+    display: flex;
+  }
+
+  input {
+    padding: 0 20px 0 0;
+    flex-grow: 1;
+    font-size: 16px;
+    background: transparent;
+    border: 0;
+    outline: none;
+
+    &::placeholder {
+      opacity: .3;
+    }
+  }
+}

@@ -1,0 +1,21 @@
+.chat--conversation__close {
+  position: absolute;
+  top: 30px;
+  right: 15px;
+  @include for-mobile-up {
+    top: -10px;
+    right: 0;
+    transform: translateY(-100%);
+  }
+
+  .chat--button {
+    width: 26px;
+    height: 26px;
+    color: var(--color-background);
+    background: var(--color-primary);
+    @include for-mobile-up {
+      width: 36px;
+      height: 36px;
+    }
+  }
+}

@@ -1,0 +1,6 @@
+.chat--form {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  width: var(--rc-message-width);
+}

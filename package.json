@@ -4,15 +4,25 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
+  "files": ["dist"],
+  "main": "./dist/ricochet-chat.umd.js",
+  "module": "./dist/ricochet-chat.es.mjs",
+  "exports": {
+    ".": {
+      "import": "./dist/ricochet-chat.es.mjs",
+      "require": "./dist/ricochet-chat.umd.js"
+    }
+  },
   "scripts": {
     "dev": "vite",
     "build": "vite build",
+    "build:lib": "vite --config vite.config-lib.js build",
     "preview": "vite preview",
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --fix --ignore-path .gitignore"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/npm/cli.git"
+    "url": "git+https://bitbucket.org/itinkers-ricochet/ricochet-chat-bot-front/"
   },
   "dependencies": {
     "@vuelidate/core": "^2.0.3",

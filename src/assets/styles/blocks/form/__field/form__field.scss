@@ -1,0 +1,17 @@
+.chat--form__field {
+  padding: 12px 15px;
+  width: 100%;
+  border: none;
+  border-radius: 0;
+  outline: none;
+  background: var(--color-background-mute);
+
+  &.invalid {
+    border: 1px solid var(--rc-color-red);
+    background: var(--rc-color-red-light);
+  }
+
+  &::placeholder {
+    opacity: .4;
+  }
+}

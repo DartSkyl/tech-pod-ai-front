@@ -1,0 +1,14 @@
+.chat--conversation {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+@import "__body/conversation__body";
+@import "__close/conversation__close";
+@import "__footer/conversation__footer";
+@import "__header/conversation__header";
+@import "__input/conversation__input";
+@import "__main/conversation__main";
+@import "__typing/conversation__typing";

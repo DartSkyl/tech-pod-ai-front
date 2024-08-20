@@ -1,0 +1,37 @@
+.chat--notifications {
+  position: relative;
+  margin-right: -20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 38.97px;
+  height: 28.24px;
+  font-weight: 900;
+  border-radius: 50% / 50%;
+  color: var(--color-background);
+  background-color: var(--color-accent);
+  transform: translateY(9px);
+  z-index: 1;
+  @include for-mobile-down {
+    width: 25.67px;
+    height: 18.67px;
+    font-size: 10px;
+    transform: translateY(16px);
+  }
+
+  &:after {
+    position: absolute;
+    content: '';
+    top: 50%;
+    right: -1px;
+    width: 9.23px;
+    height: 25.88px;
+    background-size: 100%;
+    background-repeat: no-repeat;
+    background-image: url("data:image/svg+xml,%3Csvg width='10' height='26' viewBox='0 0 10 26' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M10.0003 26L8.97469 0.117676L0.769531 8.35297L10.0003 26Z' fill='%23EEAC00'/%3E%3C/svg%3E%0A");
+    @include for-mobile-down {
+      width: 5.83px;
+      height: 16.33px;
+    }
+  }
+}

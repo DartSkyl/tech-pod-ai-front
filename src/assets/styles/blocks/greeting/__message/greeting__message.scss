@@ -1,0 +1,13 @@
+.chat--greeting__message {
+  padding: 7px 29px;
+  font-size: 18px;
+  background: var(--color-background);
+  border: 1px solid var(--color-primary);
+  border-radius: 20px 20px 0 20px;
+  transform: translateY(-13px);
+  @include for-mobile-down {
+    padding-right: 19px;
+    padding-left: 19px;
+    font-size: 12px;
+  }
+}
