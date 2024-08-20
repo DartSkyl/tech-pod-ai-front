@@ -2,7 +2,10 @@
   position: relative;
   display: flex;
   flex-direction: column;
-  height: 100%;
+  height: calc(100% - var(--rc-margin) * 2);
+  @include for-mobile-up {
+    margin: var(--rc-margin);
+  }
 }
 
 @import "__body/conversation__body";

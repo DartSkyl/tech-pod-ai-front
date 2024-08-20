@@ -1,11 +1,10 @@
 .chat--conversation__close {
-  position: absolute;
-  top: 30px;
-  right: 15px;
-  @include for-mobile-up {
-    top: -10px;
-    right: 0;
-    transform: translateY(-100%);
+  margin-bottom: 10px;
+  margin-left: auto;
+  @include for-mobile-down {
+    position: absolute;
+    top: 30px;
+    right: 15px;
   }
 
   .chat--button {

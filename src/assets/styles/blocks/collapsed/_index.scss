@@ -2,6 +2,9 @@
   display: flex;
   align-items: flex-start;
   justify-content: flex-end;
+  @include for-mobile-up {
+    margin: var(--rc-margin);
+  }
 }
 
 @import "__entry/collapsed__entry";

@@ -17,7 +17,6 @@ export function useWebSocket() {
 
     socket.value.onopen = () => {
       chat.connected = true
-      console.log('WebSocket connected')
     }
 
     socket.value.onmessage = e => {
@@ -38,7 +37,6 @@ export function useWebSocket() {
     socket.value.onclose = () => {
       chat.connected = false
       chat.typing = false
-      console.log('WebSocket disconnected')
     }
 
     socket.value.onerror = e => {
