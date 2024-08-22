@@ -56,7 +56,7 @@ async function submit() {
     <div v-if="time" class="chat--message__time">{{ formatDate(message.time) }}</div>
 
     <button v-if="message.format === 'form'" @click="submit" :disabled="submitDisabled"
-            class="button button_chat button_accent">Send
+            class="chat--button chat--button_chat chat--button_accent">Send
     </button>
   </div>
 </template>
