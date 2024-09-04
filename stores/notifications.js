@@ -20,7 +20,7 @@ export const useNotificationsStore = defineStore('notifications', () => {
     if (muted.value) return
     const audio = new Audio('/notification.mp3')
     audio.play().catch(e => {
-      console.error('Error playing notifications sound:', e)
+      console.warn('Error playing notifications sound:', e)
     })
   }
 

@@ -11,7 +11,7 @@ export function useApi() {
     fetch(url)
       .then(res=> res.json())
       .then(data => {
-        messages.value.push(...data)
+        if (data.length) messages.value.push(...data)
       })
       .catch(e => {
         console.error('Error occurred while fetching chat history', e)

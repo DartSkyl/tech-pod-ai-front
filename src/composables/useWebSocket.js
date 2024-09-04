@@ -27,6 +27,7 @@ export function useWebSocket() {
         chat.typing = false
         messages.all.push({
           ...message,
+          type: 'incoming',
           read: chat.opened
         })
         messages.updateUnread()
