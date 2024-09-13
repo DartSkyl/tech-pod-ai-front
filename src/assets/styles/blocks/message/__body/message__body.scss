@@ -3,6 +3,7 @@
   max-width: var(--rc-message-width);
   min-width: 100px;
   background: var(--color-background-mute);
+  border-radius: 10px;
   @include for-mobile-down {
     padding: 15px 30px 15px 15px;
   }

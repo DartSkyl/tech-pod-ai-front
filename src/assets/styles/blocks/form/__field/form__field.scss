@@ -2,9 +2,9 @@
   padding: 12px 15px;
   width: 100%;
   border: none;
-  border-radius: 0;
   outline: none;
   background: var(--color-background-mute);
+  border-radius: 5px;
 
   &.invalid {
     border: 1px solid var(--rc-color-red);
