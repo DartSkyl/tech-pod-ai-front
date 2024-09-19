@@ -17,6 +17,7 @@ const { all: messages } = storeToRefs(useMessagesStore())
 const input = ref('')
 
 const send = () => {
+  if (!chat.initialized) return
   if (input.value.length < 1) return
 
   const now = new Date()
@@ -64,6 +65,7 @@ defineExpose({
   scrollToBottom
 })
 
+const botName = import.meta.env.VITE_BOT_NAME ?? 'Manager'
 const privacyPolicyUrl = import.meta.env.VITE_PRIVACY_POLICY_URL ?? false
 
 </script>
@@ -89,7 +91,7 @@ const privacyPolicyUrl = import.meta.env.VITE_PRIVACY_POLICY_URL ?? false
 
           <div class="chat--operator">
             <div class="chat--operator__name">
-              Bot Name
+              {{ botName }}
               <button class="chat--button chat--button_icon" @click="notifications.toggle()"
                       :aria-label="notifications.muted ? 'Enable sounds' : 'Mute sounds'">
                 <IconMute v-if="notifications.muted"/>
@@ -125,11 +127,12 @@ const privacyPolicyUrl = import.meta.env.VITE_PRIVACY_POLICY_URL ?? false
 
       <div class="chat--conversation__input">
         <div class="chat--container">
-          <input v-model="input" name="chat-conversation-input" id="chat-conversation-input"
-                 @keydown.enter="send" placeholder="Type your message...">
+          <input v-model="input" :disabled="!chat.initialized" @keydown.enter="send"
+                 :placeholder="chat.initialized ? 'Type your message...' : 'Please fill in the form to start'"
+                 name="chat-conversation-input" id="chat-conversation-input">
           <div>
             <button class="chat--button chat--button_icon chat--button_primary" aria-label="Send a message"
-                    @click="send">
+                    :disabled="!chat.initialized" @click="send">
               <IconArrow/>
             </button>
           </div>

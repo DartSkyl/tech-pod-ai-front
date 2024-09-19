@@ -9,6 +9,7 @@ export const useChatStore = defineStore('chat', () => {
   const id = ref('')
   const socket = useWebSocket()
   const connected = ref(false)
+  const initialized = ref(false)
   const opened = ref(false)
   const typing = ref(false)
   const greeting = ref(true)
@@ -45,5 +46,5 @@ export const useChatStore = defineStore('chat', () => {
     greeting.value = false
   }
 
-  return { id, socket, greeting, connected, opened, typing, init, dismissGreeting }
+  return { id, socket, greeting, connected, initialized, opened, typing, init, dismissGreeting }
 })
