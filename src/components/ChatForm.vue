@@ -1,5 +1,5 @@
 <script setup>
-import { ref, reactive } from 'vue'
+import { reactive, ref } from 'vue'
 import { useVuelidate } from '@vuelidate/core'
 import { required, email, helpers, maxLength } from '@vuelidate/validators'
 
@@ -29,19 +29,16 @@ const rules = {
 
 const v$ = useVuelidate(rules, state)
 
-const disabled = ref(false)
-
 async function validate() {
   if (await v$.value.$validate() === false) return false
-
-  v$.value.$reset()
-  disabled.value = true
   return state
 }
 
+const disabled = ref(false)
+
 defineExpose({
-  disabled,
-  validate
+  validate,
+  disabled
 })
 
 </script>

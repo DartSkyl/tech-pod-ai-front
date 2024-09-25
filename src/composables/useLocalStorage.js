@@ -16,7 +16,7 @@ export function useLocalStorage() {
 
   function getStoredValue(key) {
     const storageObject = getStorageObject()
-    return storageObject[key]
+    return Object.prototype.hasOwnProperty.call(storageObject, key) ? storageObject[key] : null
   }
 
   function setStoredValue(key, value) {

@@ -14,4 +14,12 @@
   &::placeholder {
     opacity: .4;
   }
+
+  &:-webkit-autofill,
+  &:-webkit-autofill:hover,
+  &:-webkit-autofill:focus {
+    -webkit-text-fill-color: var(--color-text);
+    -webkit-box-shadow: 0 0 0 1000px  var(--color-background-mute) inset;
+    transition: background-color 5000s ease-in-out 0s;
+  }
 }
