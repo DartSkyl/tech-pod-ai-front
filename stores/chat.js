@@ -12,7 +12,11 @@ export const useChatStore = defineStore('chat', () => {
   const initialized = ref(false)
   const opened = ref(false)
   const typing = ref(false)
-  const greeting = ref(true)
+  const greeting = reactive({
+    show: 0,
+    timeout: 0,
+    text: import.meta.env.VITE_GREETING_MESSAGE ?? 'Hello! Can I help you?'
+  })
 
   const api = useApi()
   const { getStoredValue, setStoredValue } = useLocalStorage()
@@ -31,8 +35,7 @@ export const useChatStore = defineStore('chat', () => {
     api.getHistory(id.value)
     socket.connect(id.value)
 
-    const storedGreeting = getStoredValue('greeting')
-    if (typeof storedGreeting !== 'undefined') greeting.value = storedGreeting
+    showGreeting()
   }
 
   function generateID() {
@@ -41,9 +44,29 @@ export const useChatStore = defineStore('chat', () => {
     return Array.from(array, byte => byte.toString(16).padStart(2, '0')).join('')
   }
 
+  function showGreeting() {
+    const cookie = document.cookie
+      .split('; ')
+      .find(row => row.startsWith('rc_greeting='))
+      ?.split('=')[1]
+
+    // 1. First visit, chat hasn't been opened: show greeting after delay
+    // 2. Not first visit: show greeting without delay if it hasn't been dismissed
+    if (typeof cookie === 'undefined') {
+      const { notify } = useNotificationsStore()
+      const timeout = import.meta.env.VITE_GREETING_TIMEOUT ?? 5000
+
+      greeting.timeout = setTimeout(() => {
+        greeting.show = 1
+        notify()
+        document.cookie = `rc_greeting=${greeting.show}; path=/`
+      }, timeout)
+    } else greeting.show = parseInt(cookie)
+  }
+
   function dismissGreeting() {
-    setStoredValue('greeting', false)
-    greeting.value = false
+    greeting.show = 0
+    document.cookie = 'rc_greeting=0; path=/'
   }
 
   return { id, socket, greeting, connected, initialized, opened, typing, init, dismissGreeting }

@@ -1,10 +1,7 @@
 <script setup>
-import { reactive } from 'vue'
+import { reactive, ref } from 'vue'
 import { useVuelidate } from '@vuelidate/core'
 import { required, email, helpers, maxLength } from '@vuelidate/validators'
-import { useChatStore } from '../../stores/chat.js';
-
-const chat = useChatStore()
 
 const phone = v => {
   if (typeof v === 'undefined' || v.length === 0) return true
@@ -37,8 +34,11 @@ async function validate() {
   return state
 }
 
+const disabled = ref(false)
+
 defineExpose({
-  validate
+  validate,
+  disabled
 })
 
 </script>
@@ -47,7 +47,7 @@ defineExpose({
   <form class="chat--form">
     <div class="chat--form__row">
       <div class="chat--form__wrapper">
-        <input v-model.trim="state.name" :class="{ invalid: v$.name.$error }" :disabled="chat.initialized"
+        <input v-model.trim="state.name" :class="{ invalid: v$.name.$error }" :disabled="disabled"
                class="chat--form__field" type="text" name="chat-form-name" placeholder="Your Name"
                autocomplete="given-name">
         <div v-if="v$.name.$errors.length" :key="v$.name.$errors[0].$uid"
@@ -57,7 +57,7 @@ defineExpose({
     </div>
     <div class="chat--form__row">
       <div class="chat--form__wrapper">
-        <input v-model.trim="state.tel" :class="{ invalid: v$.tel.$error }" :disabled="chat.initialized"
+        <input v-model.trim="state.tel" :class="{ invalid: v$.tel.$error }" :disabled="disabled"
                class="chat--form__field" type="text" name="chat-form-tel" placeholder="Phone Number" autocomplete="tel">
         <div v-if="v$.tel.$errors.length" :key="v$.tel.$errors[0].$uid"
              class="chat--form__error">{{ v$.tel.$errors[0].$message }}
@@ -66,7 +66,7 @@ defineExpose({
     </div>
     <div class="chat--form__row">
       <div class="chat--form__wrapper">
-        <input v-model.trim="state.email" :class="{ invalid: v$.email.$error }" :disabled="chat.initialized"
+        <input v-model.trim="state.email" :class="{ invalid: v$.email.$error }" :disabled="disabled"
                class="chat--form__field" type="email" name="chat-form-email" placeholder="Email" autocomplete="email">
         <div v-if="v$.email.$errors.length" :key="v$.email.$errors[0].$uid"
              class="chat--form__error">{{ v$.email.$errors[0].$message }}

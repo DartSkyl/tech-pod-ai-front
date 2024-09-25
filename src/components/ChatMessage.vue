@@ -1,8 +1,7 @@
 <script setup>
 import { ref } from 'vue'
 import ChatForm from '@/components/ChatForm.vue'
-import { useChatStore } from '../../stores/chat.js';
-import { useLocalStorage } from '@/composables/useLocalStorage.js';
+import { useChatStore } from '../../stores/chat.js'
 
 const { message, time } = defineProps({
   message: {
@@ -35,6 +34,7 @@ function formatDate(s) {
 }
 
 const form = ref()
+const submitDisabled = ref(false)
 
 async function submit() {
   if (chat.initialized) return
@@ -42,8 +42,8 @@ async function submit() {
   const result = await form.value.validate()
   if (!result) return
 
+  form.value.disabled = submitDisabled.value = true
   emit('submitted', result)
-  chat.initialized = true
 }
 
 const prepareMessage = str => str.replace(/(?:https?:\/\/)?(?:www\.)?[^\s]+\.[^\s]+/g, (url) => {
@@ -63,7 +63,7 @@ const prepareMessage = str => str.replace(/(?:https?:\/\/)?(?:www\.)?[^\s]+\.[^\
 
     <div v-if="time" class="chat--message__time">{{ formatDate(message.time) }}</div>
 
-    <button v-if="message.format === 'form'" @click="submit" :disabled="chat.initialized"
+    <button v-if="message.format === 'form'" @click="submit" :disabled="submitDisabled"
             class="chat--button chat--button_chat chat--button_accent">Send
     </button>
   </div>

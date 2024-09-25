@@ -129,7 +129,7 @@ const privacyPolicyUrl = import.meta.env.VITE_PRIVACY_POLICY_URL ?? false
         <div class="chat--container">
           <input v-model="input" :disabled="!chat.initialized" @keydown.enter="send"
                  :placeholder="chat.initialized ? 'Type your message...' : 'Please fill in the form to start'"
-                 name="chat-conversation-input" id="chat-conversation-input">
+                 name="chat-conversation-input" id="chat-conversation-input" autocomplete="off">
           <div>
             <button class="chat--button chat--button_icon chat--button_primary" aria-label="Send a message"
                     :disabled="!chat.initialized" @click="send">

@@ -11,14 +11,12 @@ const messages = useMessagesStore()
 <template>
   <div class="chat--collapsed">
 
-    <div v-show="messages.unread > 0 && !chat.greeting"
+    <div v-show="messages.unread > 0 && !chat.greeting.show"
          class="chat--notifications">{{ messages.unread }}
     </div>
 
     <Transition name="slide-fade">
-      <div v-if="messages.all.length > 0
-                && messages.all[0].type === 'incoming'
-                && chat.greeting"
+      <div v-if="chat.greeting.show"
            class="chat--greeting">
         <div class="chat--greeting__close">
           <button class="chat--button chat--button_primary chat--button_icon" aria-label="Close message"
@@ -27,7 +25,7 @@ const messages = useMessagesStore()
           </button>
         </div>
         <div class="chat--greeting__message">
-          {{ messages.all[0]?.text }}
+          {{ chat.greeting.text }}
         </div>
       </div>
     </Transition>
