@@ -1,5 +1,5 @@
 <script setup>
-import { nextTick, ref, watch } from 'vue'
+import { nextTick, ref, toRef, watch } from 'vue'
 import { storeToRefs } from 'pinia'
 import IconClose from '@/components/Icons/IconClose.vue'
 import IconArrow from '@/components/Icons/IconArrow.vue'
@@ -13,6 +13,7 @@ import { useChatStore } from '../../stores/chat.js'
 const chat = useChatStore()
 const notifications = useNotificationsStore()
 const { all: messages } = storeToRefs(useMessagesStore())
+const { pushOutgoing } = useMessagesStore()
 
 const input = ref('')
 
@@ -20,21 +21,9 @@ const send = () => {
   if (!chat.initialized) return
   if (input.value.length < 1) return
 
-  const now = new Date()
-  const year = now.getFullYear()
-  const month = String(now.getMonth() + 1).padStart(2, '0')
-  const day = String(now.getDate()).padStart(2, '0')
-  const hours = String(now.getHours()).padStart(2, '0')
-  const minutes = String(now.getMinutes()).padStart(2, '0')
-  const seconds = String(now.getSeconds()).padStart(2, '0')
-
-  messages.value.push({
-    text: input.value,
-    time: `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`,
-    type: 'outgoing'
-  })
-
   const message = input.value
+
+  pushOutgoing(message)
   input.value = ''
 
   setTimeout(() => {
