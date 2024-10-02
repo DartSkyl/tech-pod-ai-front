@@ -15,7 +15,7 @@ pipelines:
               - npm run build:lib
         - step:
             name: Deploy to Development
-            deployment: development
+            deployment: staging
             script:
               - echo "Deploying project..."
               - scp -r dist/ revad@137.184.226.115:/home/revad/ricochet-chat-bot-front
