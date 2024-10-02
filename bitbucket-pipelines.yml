@@ -1,0 +1,25 @@
+image: node:22
+
+pipelines:
+  default:
+    - parallel:
+        - step:
+            name: Install Dependencies
+            caches:
+              - node
+            script:
+              - npm install
+        - step:
+            name: Build Project in Library Mode
+            script:
+              - npm run build:lib
+        - step:
+            name: Deploy to Development
+            deployment: development
+            script:
+              - echo "Deploying project..."
+              - scp -r dist/ revad@137.184.226.115:/home/revad/ricochet-chat-bot-front
+              
+definitions:
+  caches:
+    node: node_modules
