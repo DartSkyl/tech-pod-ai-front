@@ -19,18 +19,12 @@ const emit = defineEmits(['submitted'])
 const chat = useChatStore()
 
 function formatDate(s) {
-  const [date, time] = s.split(' ')
-
-  let [hour, minute] = time.split(':')
-
-  hour = parseInt(hour, 10)
-
-  const period = hour >= 12 ? 'pm' : 'am'
-
-  hour = hour % 12
-  hour = hour ? hour : 12
-
-  return `${hour}:${minute} ${period}`
+  const date = new Date(s)
+  return date.toLocaleString(undefined, {
+    hour: 'numeric',
+    minute: 'numeric',
+    hour12: true
+  })
 }
 
 const form = ref()
@@ -46,8 +40,8 @@ async function submit() {
   emit('submitted', result)
 }
 
-const prepareMessage = str => str.replace(/(?:https?:\/\/)?(?:www\.)?[^\s]+\.[^\s]+/g, (url) => {
-  const href = url.startsWith('http') ? url : `http://${url}`
+const prepareMessage = str => str.replace(/\b((https?:\/\/|www\.)?[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}(\/[^\s]*)?)\b/g, (url) => {
+  const href = url.startsWith('http') ? url : `https://${url}`
   return `<a href="${href}" target="_blank">${url}</a>`
 })
 
