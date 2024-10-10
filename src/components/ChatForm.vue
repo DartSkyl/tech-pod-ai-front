@@ -5,9 +5,7 @@ import { required, email, helpers, maxLength } from '@vuelidate/validators'
 
 const phone = v => {
   if (typeof v === 'undefined' || v.length === 0) return true
-
-  const regex = new RegExp('^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$')
-  return regex.test(v)
+  return /^(\+1\s?)?(\(?\d{3}\)?[\s.\-–]?)?\d{3}[\s.\-–]?\d{4}$/.test(v)
 }
 
 const state = reactive({

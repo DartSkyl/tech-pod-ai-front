@@ -36,6 +36,7 @@ async function submit() {
   const result = await form.value.validate()
   if (!result) return
 
+  chat.initialized = true
   form.value.disabled = submitDisabled.value = true
   emit('submitted', result)
 }
