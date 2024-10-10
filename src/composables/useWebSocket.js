@@ -20,7 +20,6 @@ export function useWebSocket() {
     }
 
     socket.value.onmessage = e => {
-      if (!chat.initialized) chat.initialized = true
       chat.typing = true
 
       const message = JSON.parse(e.data)
