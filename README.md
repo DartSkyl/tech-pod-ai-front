@@ -33,7 +33,7 @@ npm run build
 ### Compile and minify for production in web component mode
 
 ```sh
-npm run build
+npm run build:lib
 ```
 
 ### Lint with [ESLint](https://eslint.org/)
