@@ -10,6 +10,8 @@ import { useMessagesStore } from '../../stores/messages.js'
 import { useNotificationsStore } from '../../stores/notifications.js'
 import { useChatStore } from '../../stores/chat.js'
 
+const apiUrl = import.meta.env.VITE_API_URL ?? 'http://localhost:8000'
+
 const chat = useChatStore()
 const notifications = useNotificationsStore()
 const { all: messages } = storeToRefs(useMessagesStore())
@@ -72,7 +74,7 @@ const privacyPolicyUrl = import.meta.env.VITE_PRIVACY_POLICY_URL ?? false
         <div class="chat--container">
           <div class="chat--avatar">
             <div class="chat--avatar__wrapper">
-              <img src="/bot.svg" alt="">
+              <img :src="`${apiUrl}/bot.svg`" alt="Ricochet Chat Manager">
             </div>
             <span class="chat--avatar__status"
                   :class="chat.connected ? 'chat--status-online' : 'chat--status-offline'"></span>
@@ -108,7 +110,7 @@ const privacyPolicyUrl = import.meta.env.VITE_PRIVACY_POLICY_URL ?? false
       <div class="chat--conversation__footer">
         <div class="chat--container">
           <span>Created by <a target="_blank" href="https://itinkers.pro">
-            <img src="/itinkers.svg" alt="iTinkers"></a>
+            <img :src="`${apiUrl}/itinkers.svg`" alt="iTinkers"></a>
           </span>
           <span v-if="privacyPolicyUrl"><a target="_blank" :href="privacyPolicyUrl">Privacy Policy</a></span>
         </div>

@@ -6,11 +6,12 @@ import { useMessagesStore } from '../../stores/messages.js'
 const chat = useChatStore()
 const messages = useMessagesStore()
 
+const apiUrl = import.meta.env.VITE_API_URL ?? 'http://localhost:8000'
+
 </script>
 
 <template>
   <div class="chat--collapsed">
-
     <div v-show="messages.unread > 0 && !chat.greeting.show"
          class="chat--notifications">{{ messages.unread }}
     </div>
@@ -32,7 +33,7 @@ const messages = useMessagesStore()
 
     <button @click="$emit('expand')" class="chat--collapsed__entry chat--avatar" aria-label="Open chat">
       <span class="chat--avatar__wrapper">
-        <img src="/bot.svg" alt="Ricochat">
+        <img :src="`${apiUrl}/bot.svg`" alt="Ricochet Chat">
       </span>
     </button>
   </div>
