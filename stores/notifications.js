@@ -18,7 +18,9 @@ export const useNotificationsStore = defineStore('notifications', () => {
 
   function notify() {
     if (muted.value) return
-    const audio = new Audio('/notification.mp3')
+
+    const apiUrl = import.meta.env.VITE_API_URL ?? 'http://localhost:8000'
+    const audio = new Audio(`${apiUrl}/notification.mp3`)
     audio.play().catch(e => {
       console.warn('Error playing notifications sound:', e)
     })
