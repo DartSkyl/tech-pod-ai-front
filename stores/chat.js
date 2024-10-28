@@ -12,6 +12,7 @@ export const useChatStore = defineStore('chat', () => {
   const initialized = ref(false)
   const opened = ref(false)
   const typing = ref(false)
+  const interacted = ref(false)
   const greeting = reactive({
     show: 0,
     timeout: 0,
@@ -47,26 +48,42 @@ export const useChatStore = defineStore('chat', () => {
   function showGreeting() {
     const cookie = document.cookie
       .split('; ')
-      .find(row => row.startsWith('rc_greeting='))
+      .find(row => row.startsWith('rc_welcome='))
       ?.split('=')[1]
 
-    // 1. First visit, chat hasn't been opened: show greeting after delay
-    // 2. Not first visit: show greeting without delay if it hasn't been dismissed
+    // 1. First visit in 24h, chat hasn't been opened: show greeting after delay if user interacted with website
     if (typeof cookie === 'undefined') {
       const { notify } = useNotificationsStore()
       const timeout = import.meta.env.VITE_GREETING_TIMEOUT ?? 5000
+      const hours = import.meta.env.VITE_GREETING_HOURS_EXPIRES ?? 24
 
-      greeting.timeout = setTimeout(() => {
-        greeting.show = 1
-        notify()
-        document.cookie = `rc_greeting=${greeting.show}; path=/`
-      }, timeout)
+      // Detect interaction
+      const events = ['keydown', 'click', 'touchstart']
+
+      const handleInteraction = () => {
+        greeting.timeout = setTimeout(() => {
+          greeting.show = 1
+          notify()
+
+          const now = new Date()
+          now.setTime(now.getTime() + hours * 60 * 60 * 1000) // 24h
+          const expires = now.toUTCString()
+
+          document.cookie = `rc_welcome=${greeting.show}; expires=${expires}; path=/`
+        }, timeout)
+
+        events.forEach(e => removeEventListener(e, handleInteraction))
+      }
+
+      events.forEach(e => addEventListener(e, handleInteraction))
+
+      // 2. Not first visit: show greeting without delay if it hasn't been dismissed
     } else greeting.show = parseInt(cookie)
   }
 
   function dismissGreeting() {
     greeting.show = 0
-    document.cookie = 'rc_greeting=0; path=/'
+    document.cookie = 'rc_welcome=0; path=/'
   }
 
   return { id, socket, greeting, connected, initialized, opened, typing, init, dismissGreeting }
