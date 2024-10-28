@@ -53,21 +53,15 @@ export const useChatStore = defineStore('chat', () => {
 
     // 1. First visit in 24h, chat hasn't been opened: show greeting after delay if user interacted with website
     if (typeof cookie === 'undefined') {
-      console.log('First visit in 24h, chat hasn\'t been opened: show greeting after delay if user interacted with website')
-
       const { notify } = useNotificationsStore()
       const timeout = import.meta.env.VITE_GREETING_TIMEOUT ?? 5000
       const hours = import.meta.env.VITE_GREETING_HOURS_EXPIRES ?? 24
 
       // Detect interaction
-      const events = ['scroll', 'keydown', 'click', 'touchstart']
+      const events = ['keydown', 'click', 'touchstart']
 
       const handleInteraction = () => {
-        console.log('interacted')
-
         greeting.timeout = setTimeout(() => {
-          console.log('Timeout expired')
-
           greeting.show = 1
           notify()
 
@@ -84,10 +78,7 @@ export const useChatStore = defineStore('chat', () => {
       events.forEach(e => addEventListener(e, handleInteraction))
 
       // 2. Not first visit: show greeting without delay if it hasn't been dismissed
-    } else {
-      console.log('Not first visit: show greeting without delay if it hasn\'t been dismissed')
-      greeting.show = parseInt(cookie)
-    }
+    } else greeting.show = parseInt(cookie)
   }
 
   function dismissGreeting() {
