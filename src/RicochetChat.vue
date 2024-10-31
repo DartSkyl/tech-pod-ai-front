@@ -3,18 +3,14 @@ import { onMounted, ref, watch } from 'vue'
 import ChatCollapsed from '@/components/ChatCollapsed.vue'
 import ChatConversation from '@/components/ChatConversation.vue'
 import { useChatStore } from '../stores/chat.js'
-import { useNotificationsStore } from '../stores/notifications.js'
 import { useMessagesStore } from '../stores/messages.js'
+import { useGreetingStore } from '../stores/greeting.js'
 
 const chat = useChatStore()
+const greeting = useGreetingStore()
 const messages = useMessagesStore()
-const notifications = useNotificationsStore()
 
-onMounted(() => {
-  chat.init()
-  messages.init()
-  notifications.init()
-})
+onMounted(() => chat.init())
 
 const dialog = ref()
 
@@ -22,8 +18,8 @@ watch(chat, ({ opened }) => {
   if (opened) {
     messages.clearUnread()
     dialog.value.scrollToBottom()
-    chat.dismissGreeting()
-    if (chat.greeting.timeout) clearTimeout(chat.greeting.timeout)
+    greeting.dismiss()
+    if (greeting.timeout) clearTimeout(greeting.timeout)
   }
 }, { deep: true })
 

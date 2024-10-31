@@ -1,10 +1,10 @@
 <script setup>
 import IconClose from '@/components/Icons/IconClose.vue'
-import { useChatStore } from '../../stores/chat.js'
 import { useMessagesStore } from '../../stores/messages.js'
+import { useGreetingStore } from '../../stores/greeting.js'
 
-const chat = useChatStore()
 const messages = useMessagesStore()
+const greeting = useGreetingStore()
 
 const apiUrl = import.meta.env.VITE_API_URL ?? 'http://localhost:8000'
 
@@ -12,21 +12,21 @@ const apiUrl = import.meta.env.VITE_API_URL ?? 'http://localhost:8000'
 
 <template>
   <div class="chat--collapsed">
-    <div v-show="messages.unread > 0 && !chat.greeting.show"
+    <div v-show="messages.unread > 0 && !greeting.shown"
          class="chat--notifications">{{ messages.unread }}
     </div>
 
     <Transition name="slide-fade">
-      <div v-if="chat.greeting.show"
+      <div v-if="greeting.shown"
            class="chat--greeting">
         <div class="chat--greeting__close">
           <button class="chat--button chat--button_primary chat--button_icon" aria-label="Close message"
-                  @click="chat.dismissGreeting()">
+                  @click="greeting.dismiss()">
             <IconClose/>
           </button>
         </div>
         <div class="chat--greeting__message">
-          {{ chat.greeting.text }}
+          {{ greeting.text }}
         </div>
       </div>
     </Transition>
