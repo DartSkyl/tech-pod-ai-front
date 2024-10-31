@@ -7,7 +7,7 @@ export function useWebSocket() {
   const socket = ref(null)
   const chat = useChatStore()
   const messages = useMessagesStore()
-  const { notify } = useNotificationsStore()
+  const notifications = useNotificationsStore()
 
   const connect = (id) => {
     const apiUrl = import.meta.env.VITE_API_URL ?? 'http://localhost:8000'
@@ -17,6 +17,7 @@ export function useWebSocket() {
 
     socket.value.onopen = () => {
       chat.connected = true
+      notifications.init()
     }
 
     socket.value.onmessage = e => {
@@ -31,7 +32,7 @@ export function useWebSocket() {
           read: chat.opened
         })
         messages.updateUnread()
-        notify()
+        notifications.notify()
       }, message.delay ?? 1000)
     }
 
