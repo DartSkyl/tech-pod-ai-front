@@ -1,20 +1,20 @@
-import { storeToRefs } from 'pinia'
 import { useMessagesStore } from '../../stores/messages.js'
 import { useChatStore } from '../../stores/chat.js'
 
 export function useApi() {
   const chat = useChatStore()
-  const { all: messages } = storeToRefs(useMessagesStore())
+  const messages = useMessagesStore()
 
   const getHistory = async (id) => {
     const apiUrl = import.meta.env.VITE_API_URL ?? 'http://localhost:8000'
     const url = `${apiUrl}/pages/chat_history/${id}`
 
     fetch(url)
-      .then(res=> res.json())
+      .then(res => res.json())
       .then(data => {
         if (data.length) {
-          messages.value = data
+          messages.all = data
+          messages.init()
           chat.initialized = true
         }
       })

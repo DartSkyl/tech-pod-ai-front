@@ -1,5 +1,5 @@
 <script setup>
-import { nextTick, ref, toRef, watch } from 'vue'
+import { nextTick, ref, watch } from 'vue'
 import { storeToRefs } from 'pinia'
 import IconClose from '@/components/Icons/IconClose.vue'
 import IconArrow from '@/components/Icons/IconArrow.vue'
